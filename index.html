@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nails Ranny — Nail Designer</title>
+<meta name="description" content="Nails Ranny — nail designer. Alongamentos, nail art e acabamentos delicados. Agende seu horário.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- ===================== INTRO / TELA DE ABERTURA ===================== -->
+<div class="site-intro" id="siteIntro" role="presentation" aria-hidden="true">
+  <div class="site-intro-inner">
+    <span class="site-intro-eyebrow">Nail Designer</span>
+    <h1 class="site-intro-logo">Nails<br>Ranny</h1>
+    <span class="site-intro-line"></span>
+  </div>
+</div>
+
+<div class="grain-overlay" aria-hidden="true"></div>
+
+<!-- ===================== HEADER ===================== -->
+<header class="site-header" id="topo">
+  <div class="header-inner">
+    <a href="#topo" class="logo">Nails Ranny</a>
+
+    <nav class="main-nav" id="mainNav">
+      <a href="#topo" data-nav>Início</a>
+      <a href="#sobre" data-nav>Sobre</a>
+      <a href="#servicos" data-nav>Serviços</a>
+      <a href="#portfolio" data-nav>Portfólio</a>
+      <a href="#agendamento" data-nav>Agendamento</a>
+    </nav>
+
+    <button class="btn btn-line header-cta" data-whatsapp data-msg-key="geral">Agendar</button>
+
+    <button class="menu-toggle" id="menuToggle" aria-label="Abrir menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+
+  <div class="mobile-nav-backdrop" id="mobileNavBackdrop"></div>
+
+  <div class="mobile-nav" id="mobileNav">
+    <button class="mobile-nav-close" id="mobileNavClose" aria-label="Fechar menu">
+      <span></span><span></span>
+    </button>
+
+    <nav>
+      <a href="#topo" data-nav>Início</a>
+      <a href="#sobre" data-nav>Sobre</a>
+      <a href="#servicos" data-nav>Serviços</a>
+      <a href="#portfolio" data-nav>Portfólio</a>
+      <a href="#agendamento" data-nav>Agendamento</a>
+    </nav>
+    <button class="btn btn-fill" data-whatsapp data-msg-key="geral">Agendar pelo WhatsApp</button>
+  </div>
+</header>
+
+<main>
+
+  <!-- ===================== HERO ===================== -->
+  <section class="hero">
+    <div class="hero-copy" data-reveal>
+      <span class="eyebrow">Nail Designer</span>
+      <h1 class="hero-title">Nails<br>Ranny</h1>
+      <p class="hero-phrase">Detalhes que transformam suas mãos.</p>
+      <div class="hero-actions">
+        <a href="#portfolio" class="btn btn-fill-ink">Ver trabalhos</a>
+        <button class="btn btn-line-ink" data-whatsapp data-msg-key="geral">Agendar horário</button>
+      </div>
+    </div>
+
+    <div class="hero-image" data-reveal>
+      <div class="media-slot">
+        <img class="media-fill" src="images/hero.png" alt="Nails Ranny — foto de destaque" loading="eager" onerror="this.remove()">
+      </div>
+      <span class="hero-tag">Portfólio&nbsp;— 2026</span>
+    </div>
+  </section>
+
+  <!-- ===================== PORTFÓLIO ===================== -->
+  <section class="portfolio" id="portfolio">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">02 — Portfólio</span>
+      <h2>Trabalhos<br><em>selecionados</em></h2>
+    </div>
+
+    <div class="filters" data-reveal>
+      <button class="filter-btn is-active" data-filter="todos">Todos</button>
+      <button class="filter-btn" data-filter="alongamento">Alongamento</button>
+      <button class="filter-btn" data-filter="nail-art">Nail Art</button>
+      <button class="filter-btn" data-filter="francesinha">Francesinha</button>
+      <button class="filter-btn" data-filter="nude">Nude</button>
+      <button class="filter-btn" data-filter="decoradas">Decoradas</button>
+    </div>
+
+    <div class="portfolio-carousel" data-reveal>
+      <button class="carousel-arrow carousel-prev" id="portfolioPrev" aria-label="Trabalho anterior">‹</button>
+
+      <div class="carousel-viewport portfolio-viewport">
+        <div class="carousel-track portfolio-track" id="portfolioTrack">
+          <!-- Cards gerados via JS (js/script.js -> PORTFOLIO_ITEMS) -->
+        </div>
+      </div>
+
+      <button class="carousel-arrow carousel-next" id="portfolioNext" aria-label="Próximo trabalho">›</button>
+    </div>
+
+    <div class="portfolio-counter" id="portfolioCounter"></div>
+  </section>
+
+  <!-- ===================== DESTAQUE / FRASE ===================== -->
+  <section class="statement">
+    <p data-reveal>Suas mãos também fazem<br>parte do seu <em>estilo.</em></p>
+  </section>
+
+  <!-- ===================== SERVIÇOS ===================== -->
+  <section class="services" id="servicos">
+    <div class="section-head" data-reveal>
+      <span class="eyebrow">03 — Serviços</span>
+      <h2>O que a Nails<br><em>Ranny</em> oferece</h2>
+    </div>
+
+    <div class="services-carousel" data-reveal>
+      <button class="carousel-arrow carousel-prev" id="servicesPrev" aria-label="Serviço anterior">‹</button>
+
+      <div class="carousel-viewport">
+        <div class="carousel-track" id="servicesTrack">
+          <!-- Cards gerados via JS (js/script.js -> SERVICES) -->
+        </div>
+      </div>
+
+      <button class="carousel-arrow carousel-next" id="servicesNext" aria-label="Próximo serviço">›</button>
+    </div>
+
+    <div class="carousel-dots" id="servicesDots"></div>
+
+    <p class="service-note">Valores e disponibilidade sob consulta pelo WhatsApp.</p>
+  </section>
+
+  <!-- ===================== SOBRE ===================== -->
+  <section class="about" id="sobre">
+    <div class="about-image" data-reveal>
+      <div class="media-slot">
+        <div class="img-placeholder ph-about">
+          <span class="ph-label">Foto da profissional<br><em>substituir pela imagem real</em></span>
+        </div>
+        <picture>
+          <!-- Imagem pequena: usada até 1024px (onde o quadro vira paisagem 16/10).
+               Recorte pensado pra essa proporção mais baixa/larga, sem cortar o essencial. -->
+          <source media="(max-width:1024px)" srcset="images/sobre-mobile.jpg">
+          <!-- Imagem grande: usada acima de 1024px (quadro retrato 3/4). -->
+          <img class="media-fill" src="images/sobre.jpg" alt="Nails Ranny — foto da profissional" loading="lazy" onerror="this.remove()">
+        </picture>
+      </div>
+    </div>
+
+    <div class="about-copy" data-reveal>
+      <span class="eyebrow">01 — Sobre</span>
+      <h2>Nails<br><em>Ranny</em></h2>
+      <p>Mais do que cuidar das unhas, cada atendimento é pensado para valorizar seu estilo e transformar pequenos detalhes em uma experiência especial.</p>
+      <span class="about-signature">— Nails Ranny</span>
+    </div>
+  </section>
+
+  <!-- ===================== AGENDAMENTO ===================== -->
+  <section class="booking" id="agendamento">
+    <div class="booking-inner" data-reveal>
+      <span class="eyebrow">04 — Agendamento</span>
+      <h2>Vamos marcar<br><em>seu horário?</em></h2>
+      <p>Escolha seu serviço e entre em contato para consultar disponibilidade.</p>
+      <button class="btn btn-fill-lg" data-whatsapp data-msg-key="geral">Agendar pelo WhatsApp</button>
+    </div>
+  </section>
+
+  <!-- ===================== INSTAGRAM ===================== -->
+  <section class="instagram-strip">
+    <p data-reveal>Veja mais trabalhos no Instagram.</p>
+    <a href="#" id="instagramLink" class="btn btn-line-ink" data-reveal target="_blank" rel="noopener">@nail_sranny</a>
+  </section>
+
+</main>
+
+<!-- ===================== FOOTER ===================== -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <span class="footer-logo">Nails Ranny</span>
+      <span class="footer-role">Nail Designer</span>
+    </div>
+    <div class="footer-links">
+      <a href="#" id="footerInstagram" target="_blank" rel="noopener">Instagram</a>
+      <button data-whatsapp data-msg-key="geral">WhatsApp</button>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="anoAtual"></span> Nails Ranny</span>
+    <span class="footer-demo-tag">Demonstração de projeto</span>
+  </div>
+</footer>
+
+<!-- ===================== LIGHTBOX ===================== -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Fechar">
+    <span></span><span></span>
+  </button>
+  <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Anterior">‹</button>
+  <div class="lightbox-content" id="lightboxContent"></div>
+  <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Próxima">›</button>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
