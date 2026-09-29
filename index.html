@@ -67,21 +67,32 @@
 
   <!-- ===================== HERO ===================== -->
   <section class="hero">
-    <div class="hero-copy" data-reveal>
-      <span class="eyebrow">Nail Designer</span>
-      <h1 class="hero-title">Nails<br>Ranny</h1>
-      <p class="hero-phrase">Detalhes que transformam suas mãos.</p>
-      <div class="hero-actions">
-        <a href="#portfolio" class="btn btn-fill-ink">Ver trabalhos</a>
-        <button class="btn btn-line-ink" data-whatsapp data-msg-key="geral">Agendar horário</button>
-      </div>
+    <div class="hero-bg">
+      <picture>
+        <source
+          media="(max-width: 640px)"
+          srcset="images/hero-mobile.png"
+        >
+        <img
+          src="images/hero.png"
+          alt="Nails Ranny — foto de destaque"
+          loading="eager"
+          fetchpriority="high"
+          onerror="this.remove()"
+        >
+      </picture>
     </div>
 
-    <div class="hero-image" data-reveal>
-      <div class="media-slot">
-        <img class="media-fill" src="images/hero.png" alt="Nails Ranny — foto de destaque" loading="eager" onerror="this.remove()">
+    <div class="hero-inner">
+      <div class="hero-copy" data-reveal>
+        <span class="eyebrow">Nail Designer</span>
+        <h1 class="hero-title">Nails<br>Ranny</h1>
+        <p class="hero-phrase">Detalhes que transformam suas mãos.</p>
+        <div class="hero-actions">
+          <a href="#portfolio" class="btn btn-fill-ink">Ver trabalhos</a>
+          <button class="btn btn-line-ink" data-whatsapp data-msg-key="geral">Agendar horário</button>
+        </div>
       </div>
-      <span class="hero-tag">Portfólio&nbsp;— 2026</span>
     </div>
   </section>
 
@@ -149,9 +160,7 @@
   <section class="about" id="sobre">
     <div class="about-image" data-reveal>
       <div class="media-slot">
-        <div class="img-placeholder ph-about">
-          <span class="ph-label">Foto da profissional<br><em>substituir pela imagem real</em></span>
-        </div>
+        <div class="img-placeholder ph-about"></div>
         <picture>
           <!-- Imagem pequena: usada até 1024px (onde o quadro vira paisagem 16/10).
                Recorte pensado pra essa proporção mais baixa/larga, sem cortar o essencial. -->

@@ -8,7 +8,7 @@
 
 // Número de WhatsApp único, usado por TODOS os botões do site.
 // Formato: código do país + DDD + número, sem espaços, traços ou "+".
-const WHATSAPP_NUMBER = "5561999999999"; // <-- SUBSTITUIR pelo número real
+const WHATSAPP_NUMBER = "5561995685985"; // <-- SUBSTITUIR pelo número real
 
 // Link do Instagram, usado no botão da seção e no rodapé.
 const INSTAGRAM_URL = "https://www.instagram.com/nail_sranny"; // <-- SUBSTITUIR se necessário
@@ -29,10 +29,38 @@ const WHATSAPP_MESSAGES = {
    "image" é o caminho da foto real (opcional): se o arquivo não existir,
    o card mostra só o degradê "tone" normalmente — nada quebra. */
 const SERVICES = [
-  { number: "01", title: "Alongamento", description: "Unhas cuidadosamente estruturadas para um resultado elegante e duradouro.", msgKey: "alongamento", tone: 1, image: "images/servicos/alongamento.jpg" },
-  { number: "02", title: "Manutenção", description: "Cuidados para manter suas unhas bonitas e impecáveis.", msgKey: "manutencao", tone: 2, image: "images/servicos/manutencao.jpg" },
-  { number: "03", title: "Nail Art", description: "Detalhes personalizados para quem quer algo único.", msgKey: "nailart", tone: 3, image: "images/servicos/nailart.jpg" },
-  { number: "04", title: "Esmaltação", description: "Acabamento delicado para complementar seu estilo.", msgKey: "esmaltacao", tone: 4, image: "images/servicos/esmaltacao.jpg" }
+  {
+    number: "01",
+    title: "Alongamento",
+    description: "Unhas cuidadosamente estruturadas para um resultado elegante e duradouro.",
+    msgKey: "alongamento",
+    tone: 1,
+    image: "images/servicos/alongamento.png"
+  },
+  {
+    number: "02",
+    title: "Manutenção",
+    description: "Cuidados para manter suas unhas bonitas e impecáveis.",
+    msgKey: "manutencao",
+    tone: 2,
+    image: "images/servicos/manutencao.png"
+  },
+  {
+    number: "03",
+    title: "Nail Art",
+    description: "Detalhes personalizados para quem quer algo único.",
+    msgKey: "nailart",
+    tone: 3,
+    image: "images/servicos/nailart.png"
+  },
+  {
+    number: "04",
+    title: "Esmaltação",
+    description: "Acabamento delicado para complementar seu estilo.",
+    msgKey: "esmaltacao",
+    tone: 4,
+    image: "images/servicos/esmaltacao.png"
+  }
 ];
 
 /* Itens do portfólio. Cada item usa um placeholder visual — basta
@@ -218,6 +246,37 @@ function shortestDistance(index, active, length){
   return raw;
 }
 
+/* Calcula, para a largura de tela atual, quantos vizinhos cabem de cada lado e
+   qual deve ser a distância entre os centros dos cards.
+
+   Antes essa distância era uma constante (190px / 158px), pensada para telas
+   largas. Em telas estreitas os vizinhos acabavam projetados para fora do
+   viewport — que tem overflow:hidden — e apareciam como pedaços de card com o
+   texto cortado na borda. Aqui a distância é limitada para que o card mais
+   externo ainda visível caiba inteiro, e os cards além desse limite são
+   escondidos em vez de ficarem pela metade.
+
+   scales[n] = escala aplicada ao card que está n posições do centro. */
+function carouselLayout(viewport, cardWidth, scales, designStep){
+  const viewportWidth = viewport.clientWidth;
+  const screen = window.innerWidth;
+
+  // No celular o card ativo sozinho já ocupa quase toda a largura: mostrar
+  // vizinhos ali só produziria as fatias cortadas. Um card por vez, centrado.
+  if (screen <= 600){
+    return { step: viewportWidth, maxVisible: 0 };
+  }
+
+  const maxVisible = screen <= 1024 ? 1 : 2;
+
+  // Metade da largura do card mais externo que ainda será exibido, já escalado.
+  const outerHalfWidth = (cardWidth * scales[maxVisible]) / 2;
+  // Distância máxima que mantém esse card inteiro dentro do viewport.
+  const maxStep = (viewportWidth / 2 - outerHalfWidth) / maxVisible;
+
+  return { step: Math.max(60, Math.min(designStep, maxStep)), maxVisible };
+}
+
 function buildPortfolioCarousel(items){
   portfolioItems = items;
   portfolioActiveIndex = 0;
@@ -233,11 +292,7 @@ function buildPortfolioCarousel(items){
 
     card.innerHTML = `
       <div class="portfolio-card-inner">
-        <div class="img-placeholder" style="height:100%;">
-          <span class="ph-label" style="position:absolute; bottom:78px; left:22px;">
-            Foto do trabalho<br><em>substituir pela imagem real</em>
-          </span>
-        </div>
+        <div class="img-placeholder" style="height:100%;"></div>
         <img class="media-fill" src="${item.image}" alt="${item.title} — ${item.tag}" loading="lazy" onerror="this.remove()">
         <span class="portfolio-card-mark">NR</span>
         <div class="portfolio-card-caption">
@@ -271,19 +326,32 @@ function renderPortfolioCarousel(){
   const cards = portfolioTrack.querySelectorAll(".portfolio-card");
   const total = portfolioItems.length;
 
+  const active = portfolioTrack.querySelector(".portfolio-card");
+  const cardWidth = active ? active.offsetWidth : 240;
+  const { step, maxVisible } = carouselLayout(
+    document.querySelector(".portfolio-viewport"),
+    cardWidth,
+    [1, 0.8, 0.64],
+    PORTFOLIO_STEP
+  );
+
   cards.forEach((card) => {
     const index = Number(card.dataset.index);
     const distance = shortestDistance(index, portfolioActiveIndex, total);
     const absDistance = Math.abs(distance);
+    const isVisible = absDistance <= maxVisible;
 
     const scale = absDistance === 0 ? 1 : absDistance === 1 ? 0.8 : 0.64;
-    const opacity = absDistance === 0 ? 1 : absDistance === 1 ? 0.5 : 0.2;
+    const baseOpacity = absDistance === 0 ? 1 : absDistance === 1 ? 0.5 : 0.2;
+    const opacity = isVisible ? baseOpacity : 0;
     const rotateY = distance === 0 ? 0 : distance > 0 ? -12 : 12;
-    const translateX = distance * PORTFOLIO_STEP;
+    const translateX = distance * step;
 
     card.style.transform = `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`;
     card.style.opacity = String(opacity);
     card.style.zIndex = String(100 - absDistance);
+    // Cards escondidos não devem receber clique/toque nem foco por teclado.
+    card.style.pointerEvents = isVisible ? "" : "none";
     card.classList.toggle("is-active", absDistance === 0);
     card.setAttribute("aria-hidden", absDistance === 0 ? "false" : "true");
   });
@@ -389,9 +457,7 @@ function renderLightboxItem(index){
   const item = portfolioItems[index];
   lightboxContent.innerHTML = `
     <div class="media-slot">
-      <div class="img-placeholder" style="height:100%;">
-        <span class="ph-label">Foto do trabalho — ${item.title} (${item.tag})<br><em>substituir pela imagem real</em></span>
-      </div>
+      <div class="img-placeholder" style="height:100%;"></div>
       <img class="media-fill" src="${item.image}" alt="${item.title} — ${item.tag}" loading="eager" onerror="this.remove()">
     </div>
   `;
@@ -480,26 +546,60 @@ function buildServicesCarousel(){
   });
 
   renderServicesCarousel();
+  syncServicesHeights();
+}
+
+/* Iguala a altura de todos os cards de serviço à altura do MAIOR conteúdo real.
+   Antes a altura era um valor fixo por breakpoint: se a descrição precisasse de
+   mais linhas do que aquele valor previa (o que acontecia no mobile), o texto
+   transbordava e era cortado pelo overflow:hidden do card. Medindo o conteúdo,
+   nada é cortado — em qualquer tela e com qualquer tamanho de texto. */
+function syncServicesHeights(){
+  const cards = servicesTrack.querySelectorAll(".carousel-card");
+  if (!cards.length) return;
+
+  // 1) Solta as alturas para cada card assumir a altura natural do seu conteúdo.
+  cards.forEach((card) => { card.style.height = "auto"; });
+
+  // 2) Descobre a maior delas. offsetHeight ignora transform (scale/rotate),
+  //    então a medida é a da caixa de layout, sem distorção.
+  let tallest = 0;
+  cards.forEach((card) => { tallest = Math.max(tallest, card.offsetHeight); });
+
+  // 3) Aplica essa altura a todos, mantendo o carrossel visualmente uniforme.
+  cards.forEach((card) => { card.style.height = `${tallest}px`; });
+  servicesTrack.style.height = `${tallest + 40}px`; // folga para a sombra
 }
 
 function renderServicesCarousel(){
   const cards = servicesTrack.querySelectorAll(".carousel-card");
   const total = SERVICES.length;
-  const step = 158; // distância horizontal entre cards vizinhos
+
+  const firstCard = servicesTrack.querySelector(".carousel-card");
+  const cardWidth = firstCard ? firstCard.offsetWidth : 236;
+  const { step, maxVisible } = carouselLayout(
+    servicesTrack.closest(".carousel-viewport"),
+    cardWidth,
+    [1, 0.82, 0.68],
+    158
+  );
 
   cards.forEach((card) => {
     const index = Number(card.dataset.index);
     const distance = shortestDistance(index, servicesActiveIndex, total);
     const absDistance = Math.abs(distance);
+    const isVisible = absDistance <= maxVisible;
 
     const scale = absDistance === 0 ? 1 : absDistance === 1 ? 0.82 : 0.68;
-    const opacity = absDistance === 0 ? 1 : absDistance === 1 ? 0.55 : 0.25;
+    const baseOpacity = absDistance === 0 ? 1 : absDistance === 1 ? 0.55 : 0.25;
+    const opacity = isVisible ? baseOpacity : 0;
     const rotateY = distance === 0 ? 0 : distance > 0 ? -10 : 10;
     const translateX = distance * step;
 
     card.style.transform = `translateX(${translateX}px) scale(${scale}) rotateY(${rotateY}deg)`;
     card.style.opacity = String(opacity);
     card.style.zIndex = String(100 - absDistance);
+    card.style.pointerEvents = isVisible ? "" : "none";
     card.classList.toggle("is-active", absDistance === 0);
     card.setAttribute("aria-hidden", absDistance === 0 ? "false" : "true");
   });
@@ -622,5 +722,34 @@ buildPortfolioCarousel(PORTFOLIO_ITEMS);
 buildServicesCarousel();
 startServicesAutoplay();
 
+/* As alturas dependem da largura da tela e das fontes carregadas, então
+   recalculamos ao redimensionar e assim que as webfonts ficam prontas
+   (as métricas mudam quando a Cormorant/Jost substituem a fonte de fallback). */
+let servicesResizeTimer = null;
+window.addEventListener("resize", () => {
+  clearTimeout(servicesResizeTimer);
+  servicesResizeTimer = setTimeout(() => {
+    syncServicesHeights();
+    // O passo e a quantidade de vizinhos visíveis dependem da largura do
+    // viewport, então os dois carrosséis precisam ser reposicionados.
+    renderServicesCarousel();
+    renderPortfolioCarousel();
+  }, 150);
+});
+
+if (document.fonts && document.fonts.ready){
+  document.fonts.ready.then(syncServicesHeights);
+}
+
 const anoAtual = document.getElementById("anoAtual");
 if (anoAtual) anoAtual.textContent = new Date().getFullYear();
+
+const header = document.querySelector(".site-header");
+
+function updateHeader() {
+  header.classList.toggle("is-scrolled", window.scrollY > 40);
+}
+
+window.addEventListener("scroll", updateHeader, { passive: true });
+
+updateHeader();
